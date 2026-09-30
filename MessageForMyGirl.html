@@ -1,0 +1,1328 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>For My Girl ❤️</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow-x: hidden;
+
+            background: #ffc9d8;
+        }
+
+
+        /* =========================================
+           BACKGROUND
+        ========================================= */
+
+        .background {
+            position: fixed;
+
+            top: 0;
+            left: 0;
+
+            width: 100vw;
+            height: 100vh;
+
+            object-fit: cover;
+            object-position: center;
+
+            z-index: -10;
+        }
+
+
+        /* =========================================
+           MUSIC
+        ========================================= */
+
+        audio {
+            display: none;
+        }
+
+
+        /* =========================================
+           GENERAL SCREEN
+        ========================================= */
+
+        .screen {
+            min-height: 100vh;
+            width: 100%;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 25px;
+
+            transition:
+                opacity 0.6s ease,
+                transform 0.6s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transform: scale(0.96);
+        }
+
+
+        /* =========================================
+           ENVELOPE SCREEN
+        ========================================= */
+
+        #envelopeScreen {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .intro-title {
+            color: white;
+
+            font-size: 30px;
+
+            margin-bottom: 35px;
+
+            text-shadow:
+                0 3px 12px rgba(120, 30, 60, 0.45);
+        }
+
+        .intro-title span {
+            display: block;
+
+            font-size: 17px;
+            font-weight: normal;
+
+            margin-top: 10px;
+        }
+
+
+        /* =========================================
+           ENVELOPE
+        ========================================= */
+
+        .envelope-wrapper {
+            position: relative;
+
+            width: 300px;
+            height: 210px;
+
+            cursor: pointer;
+
+            perspective: 1000px;
+
+            transition:
+                transform 0.3s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: translateY(-5px);
+        }
+
+        .envelope {
+            position: absolute;
+
+            width: 100%;
+            height: 100%;
+
+            left: 0;
+            top: 0;
+
+            background: #f6a8bd;
+
+            border-radius: 10px;
+
+            box-shadow:
+                0 20px 50px rgba(100, 20, 50, 0.35);
+
+            transition:
+                transform 0.5s ease;
+        }
+
+
+        /* Envelope front */
+
+        .envelope-front {
+            position: absolute;
+
+            inset: 0;
+
+            overflow: hidden;
+
+            border-radius: 10px;
+
+            z-index: 3;
+        }
+
+
+        .envelope-front::before {
+            content: "";
+
+            position: absolute;
+
+            bottom: 0;
+            left: 0;
+
+            width: 0;
+            height: 0;
+
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 115px solid #ef91ab;
+        }
+
+
+        .envelope-front::after {
+            content: "";
+
+            position: absolute;
+
+            bottom: 0;
+            left: 0;
+
+            width: 0;
+            height: 0;
+
+            border-left: 150px solid #f5b0c3;
+
+            border-top: 105px solid transparent;
+            border-bottom: 105px solid transparent;
+        }
+
+
+        /* Envelope flap */
+
+        .flap {
+            position: absolute;
+
+            top: 0;
+            left: 0;
+
+            width: 0;
+            height: 0;
+
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid #e9839f;
+
+            transform-origin: top center;
+
+            z-index: 5;
+
+            transition:
+                transform 0.9s ease;
+        }
+
+
+        /* Envelope heart */
+
+        .envelope-heart {
+            position: absolute;
+
+            z-index: 6;
+
+            left: 50%;
+            top: 48%;
+
+            transform:
+                translate(-50%, -50%);
+
+            font-size: 45px;
+
+            color: white;
+
+            text-shadow:
+                0 3px 8px rgba(120, 30, 60, 0.25);
+
+            transition:
+                opacity 0.3s ease;
+        }
+
+
+        /* Envelope name */
+
+        .envelope-name {
+            position: absolute;
+
+            z-index: 6;
+
+            left: 50%;
+            bottom: 25px;
+
+            transform:
+                translateX(-50%);
+
+            color: white;
+
+            font-weight: bold;
+
+            font-size: 20px;
+
+            letter-spacing: 3px;
+        }
+
+
+        .click-text {
+            margin-top: 30px;
+
+            color: white;
+
+            font-size: 16px;
+
+            animation:
+                pulse 1.7s infinite;
+
+            text-shadow:
+                0 2px 7px rgba(100, 20, 50, 0.4);
+        }
+
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+        }
+
+
+        /* Envelope opening */
+
+        .envelope-wrapper.opening .flap {
+            transform:
+                rotateX(180deg);
+        }
+
+        .envelope-wrapper.opening .envelope-heart {
+            opacity: 0;
+        }
+
+        .envelope-wrapper.opening .envelope {
+            transform:
+                translateY(10px);
+        }
+
+
+        /* =========================================
+           OPEN / CLOSE SCREEN
+        ========================================= */
+
+        #choiceScreen {
+            flex-direction: column;
+
+            text-align: center;
+        }
+
+
+        .choice-title {
+            color: #b52f55;
+
+            font-size: 31px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .choice-subtitle {
+            color: #704050;
+
+            margin-bottom: 35px;
+
+            font-size: 16px;
+        }
+
+
+        .paper-container {
+            display: flex;
+
+            justify-content: center;
+            align-items: stretch;
+
+            gap: 25px;
+
+            width: 100%;
+            max-width: 650px;
+        }
+
+
+        .choice-card {
+            position: relative;
+
+            width: 280px;
+            min-height: 220px;
+
+            padding: 30px 25px;
+
+            background:
+                rgba(255, 238, 245, 0.96);
+
+            border:
+                2px solid white;
+
+            border-radius: 15px;
+
+            box-shadow:
+                0 15px 35px rgba(120, 40, 70, 0.22);
+
+            cursor: pointer;
+
+            transition:
+                transform 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+
+        .choice-card:hover {
+            transform:
+                translateY(-10px) rotate(-1deg);
+
+            box-shadow:
+                0 22px 45px rgba(120, 40, 70, 0.3);
+        }
+
+
+        .close-card:hover {
+            transform:
+                translateY(-10px) rotate(1deg);
+        }
+
+
+        .paper-heart {
+            font-size: 42px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .open-card .paper-heart {
+            color: #e8486a;
+        }
+
+
+        .close-card .paper-heart {
+            color: #aaa;
+        }
+
+
+        .choice-card h2 {
+            margin:
+                5px 0 12px;
+
+            color: #b52f55;
+        }
+
+
+        .close-card h2 {
+            color: #777;
+        }
+
+
+        .choice-card p {
+            color: #704050;
+
+            line-height: 1.6;
+
+            font-size: 15px;
+        }
+
+
+        .choice-button {
+            display: inline-block;
+
+            margin-top: 10px;
+
+            padding:
+                11px 28px;
+
+            border-radius: 30px;
+
+            background: #e8486a;
+
+            color: white;
+
+            font-weight: bold;
+
+            box-shadow:
+                0 6px 15px rgba(200, 60, 100, 0.25);
+        }
+
+
+        .close-card .choice-button {
+            background: #999;
+        }
+
+
+        /* =========================================
+           SAD SCREEN
+        ========================================= */
+
+        #sadScreen {
+            text-align: center;
+
+            flex-direction: column;
+        }
+
+
+        .sad-card {
+            width: 100%;
+            max-width: 550px;
+
+            padding:
+                45px 35px;
+
+            background:
+                rgba(255, 240, 246, 0.96);
+
+            border:
+                2px solid white;
+
+            border-radius: 25px;
+
+            box-shadow:
+                0 20px 50px rgba(100, 30, 60, 0.25);
+        }
+
+
+        .sad-emoji {
+            font-size: 65px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .sad-card h1 {
+            color: #b52f55;
+
+            font-size: 28px;
+        }
+
+
+        .sad-card p {
+            color: #704050;
+
+            line-height: 1.8;
+
+            font-size: 16px;
+        }
+
+
+        .back-button {
+            margin-top: 20px;
+
+            border: none;
+
+            border-radius: 30px;
+
+            padding:
+                12px 32px;
+
+            background: #e8486a;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition:
+                transform 0.25s ease;
+        }
+
+
+        .back-button:hover {
+            transform:
+                translateY(-3px);
+        }
+
+
+        /* =========================================
+           MESSAGE SCREEN
+        ========================================= */
+
+        #messageScreen {
+            align-items: flex-start;
+
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+
+
+        .card {
+            width: 100%;
+            max-width: 750px;
+
+            padding: 40px;
+
+            background:
+                rgba(255, 235, 242, 0.94);
+
+            backdrop-filter:
+                blur(6px);
+
+            -webkit-backdrop-filter:
+                blur(6px);
+
+            border:
+                2px solid rgba(255, 255, 255, 0.95);
+
+            border-radius: 28px;
+
+            box-shadow:
+                0 15px 45px rgba(130, 40, 70, 0.25),
+                0 0 30px rgba(255, 160, 190, 0.25);
+
+            animation:
+                messageAppear 0.8s ease;
+        }
+
+
+        @keyframes messageAppear {
+
+            from {
+                opacity: 0;
+
+                transform:
+                    translateY(25px);
+            }
+
+            to {
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+
+        }
+
+
+        .heart {
+            text-align: center;
+
+            font-size: 42px;
+
+            color: #e85b7a;
+
+            margin-bottom: 8px;
+        }
+
+
+        h1 {
+            text-align: center;
+
+            color: #b52f55;
+
+            font-size: 30px;
+
+            line-height: 1.4;
+
+            margin-top: 0;
+
+            margin-bottom: 30px;
+        }
+
+
+        h1 b {
+            color: #e8486a;
+        }
+
+
+        .card p {
+            font-size: 17px;
+
+            line-height: 1.8;
+
+            color: #5e3040;
+
+            margin-bottom: 23px;
+        }
+
+
+        .signature {
+            text-align: center;
+
+            margin-top: 35px;
+
+            font-size: 18px;
+
+            line-height: 1.8;
+
+            color: #b52f55;
+        }
+
+
+        .signature b {
+            color: #e8486a;
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 700px) {
+
+            .intro-title {
+                font-size: 25px;
+            }
+
+
+            .envelope-wrapper {
+                width: 270px;
+                height: 190px;
+            }
+
+
+            .envelope-front::before {
+                border-left-width: 135px;
+                border-right-width: 135px;
+            }
+
+
+            .envelope-front::after {
+                border-left-width: 135px;
+
+                border-top-width: 95px;
+                border-bottom-width: 95px;
+            }
+
+
+            .flap {
+                border-left-width: 135px;
+                border-right-width: 135px;
+
+                border-top-width: 100px;
+            }
+
+
+            .paper-container {
+                flex-direction: column;
+
+                align-items: center;
+            }
+
+
+            .choice-card {
+                width: 100%;
+
+                max-width: 330px;
+            }
+
+
+            .card {
+                padding:
+                    25px 20px;
+
+                border-radius: 22px;
+            }
+
+
+            .heart {
+                font-size: 35px;
+            }
+
+
+            h1 {
+                font-size: 24px;
+            }
+
+
+            .card p {
+                font-size: 15px;
+
+                line-height: 1.7;
+            }
+
+
+            .signature {
+                font-size: 16px;
+            }
+
+
+            .sad-card {
+                padding:
+                    35px 25px;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         BACKGROUND
+    ========================================== -->
+
+    <img src="bg.png" class="background" alt="Pink heart and teddy bear background">
+
+
+    <!-- =========================================
+         MUSIC
+    ========================================== -->
+
+    <audio id="bgMusic" loop preload="auto">
+
+        <source src="My Valentine.mp3" type="audio/mpeg">
+
+    </audio>
+
+
+
+    <!-- =========================================
+         1. ENVELOPE SCREEN
+    ========================================== -->
+
+    <section id="envelopeScreen" class="screen">
+
+        <div class="intro-title">
+
+            A little something for you, KAISHA 💗
+
+            <span>
+                I made this just for you.
+            </span>
+
+        </div>
+
+
+        <div class="envelope-wrapper" id="envelopeWrapper">
+
+            <div class="envelope">
+
+                <div class="flap"></div>
+
+                <div class="envelope-front"></div>
+
+                <div class="envelope-heart">
+                    ♡
+                </div>
+
+                <div class="envelope-name">
+                    KAISHA
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="click-text">
+            Click the envelope 💌
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         2. OPEN / CLOSE
+    ========================================== -->
+
+    <section id="choiceScreen" class="screen hidden">
+
+        <h1 class="choice-title">
+            There's something for you 💗
+        </h1>
+
+
+        <p class="choice-subtitle">
+            Choose what you want to do.
+        </p>
+
+
+        <div class="paper-container">
+
+
+            <!-- OPEN -->
+
+            <div class="choice-card open-card" onclick="openMessage()">
+
+                <div class="paper-heart">
+                    💗
+                </div>
+
+
+                <h2>
+                    OPEN
+                </h2>
+
+
+                <p>
+                    Read the little message I made especially for you.
+                </p>
+
+
+                <span class="choice-button">
+                    Open 💌
+                </span>
+
+            </div>
+
+
+
+            <!-- CLOSE -->
+
+            <div class="choice-card close-card" onclick="showSad()">
+
+                <div class="paper-heart">
+                    🤍
+                </div>
+
+
+                <h2>
+                    CLOSE
+                </h2>
+
+
+                <p>
+                    Maybe later...
+                </p>
+
+
+                <span class="choice-button">
+                    Close
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         3. SAD SCREEN
+    ========================================== -->
+
+    <section id="sadScreen" class="screen hidden">
+
+        <div class="sad-card">
+
+            <div class="sad-emoji">
+                🥺💔
+            </div>
+
+
+            <h1>
+                Sigurado ka ba?
+            </h1>
+
+
+            <p>
+                Ayaw mo talaga basahin?
+                <br>
+                May ginawa pa naman ako para sa’yo...
+            </p>
+
+
+            <p>
+                Pwede ka pang bumalik. 🤍
+            </p>
+
+
+            <button class="back-button" onclick="goBack()">
+                ← Back
+            </button>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         4. FINAL MESSAGE
+    ========================================== -->
+
+    <section id="messageScreen" class="screen hidden">
+
+        <div class="card">
+
+
+            <div class="heart">
+                ♡
+            </div>
+
+
+            <h1>
+
+                Happy October 1, my girl
+
+                <b>
+                    KAISHA ❤️
+                </b>.
+
+            </h1>
+
+
+
+            <p>
+
+                Gusto ko lang sabihin sa’yo ngayon kung gaano ka kahalaga sa akin.
+                Alam kong hindi pa naman tayo, at best friends pa lang tayo, pero kahit
+                ganon, hindi nagbabago yung nararamdaman ko para sa’yo. Hindi ko kailangan
+                ng label para masabing special ka sa akin, kasi sa totoo lang, matagal ko
+                nang nararamdaman na iba ka sa lahat.
+
+            </p>
+
+
+
+            <p>
+
+                Ikaw yung taong gusto kong nandiyan, yung taong gusto kong kamustahin kahit
+                simpleng “kumain ka na ba?” lang, yung taong gusto kong suportahan sa mga
+                bagay na ginagawa mo, at yung taong gusto kong makita na masaya. Hindi ko
+                naman ginagawa lahat ng ’yon para may kapalit. Gusto ko lang, kasi ikaw ’yon.
+
+            </p>
+
+
+
+            <p>
+
+                Alam kong may mga bagay na hindi pa para sa atin ngayon, at nirerespeto ko
+                ’yon. Hindi kita mamadaliin at hindi kita pipilitin na ibigay sa akin yung
+                bagay na hindi mo pa kayang ibigay. Kung best friend muna tayo, tatanggapin ko.
+                Mas gugustuhin kong manatili kang komportable sa akin kaysa pilitin kang maging
+                something na hindi ka pa ready.
+
+            </p>
+
+
+
+            <p>
+
+                Pero kung tatanungin mo ako kung sino yung girl na nasa puso ko ngayon,
+                ikaw pa rin. Ikaw yung only one girl na gusto kong piliin at pahalagahan.
+                Hindi ko alam kung saan tayo dadalhin ng panahon, pero habang nandito ka sa
+                buhay ko, gusto kong maging mabuting tao para sa’yo at maging taong pwede
+                mong sandalan kapag kailangan mo.
+
+            </p>
+
+
+
+            <p>
+
+                Hindi ko hinihingi na suklian mo lahat ng nararamdaman ko. Gusto ko lang
+                malaman mo na genuine ako sa’yo. Kahit walang label, kahit best friends pa
+                lang tayo, may isang bagay na sigurado ako—sobrang thankful ako na nakilala
+                kita at naging parte ka ng buhay ko.
+
+            </p>
+
+
+
+            <div class="signature">
+
+                Happy October 1, my girl.
+
+                <b>
+                    KaiKai Maasim 🤍
+                </b>
+
+
+                <br><br>
+
+
+                Kahit hindi pa tayo,
+
+                ikaw pa rin ang only one girl ko.
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================================
+         JAVASCRIPT
+    ========================================== -->
+
+    <script>
+
+        const envelopeWrapper =
+            document.getElementById("envelopeWrapper");
+
+
+        const envelopeScreen =
+            document.getElementById("envelopeScreen");
+
+
+        const choiceScreen =
+            document.getElementById("choiceScreen");
+
+
+        const sadScreen =
+            document.getElementById("sadScreen");
+
+
+        const messageScreen =
+            document.getElementById("messageScreen");
+
+
+        const bgMusic =
+            document.getElementById("bgMusic");
+
+
+
+        /* =========================================
+           MUSIC FADE IN
+        ========================================== */
+
+        function fadeInMusic() {
+
+            bgMusic.volume = 0;
+
+            const playPromise =
+                bgMusic.play();
+
+
+            if (playPromise !== undefined) {
+
+                playPromise
+                    .then(() => {
+
+                        let volume = 0;
+
+                        const fade =
+                            setInterval(() => {
+
+                                volume += 0.02;
+
+                                if (volume >= 0.35) {
+
+                                    volume = 0.35;
+
+                                    clearInterval(fade);
+
+                                }
+
+                                bgMusic.volume = volume;
+
+                            }, 100);
+
+                    })
+                    .catch(() => {
+
+                        console.log(
+                            "Music could not start automatically."
+                        );
+
+                    });
+
+            }
+
+        }
+
+
+
+        /* =========================================
+           ENVELOPE CLICK
+        ========================================== */
+
+        envelopeWrapper.addEventListener(
+            "click",
+            function () {
+
+                /* 🎵 START MUSIC */
+
+                fadeInMusic();
+
+
+                /* 💌 OPEN ENVELOPE */
+
+                envelopeWrapper.classList.add(
+                    "opening"
+                );
+
+
+                setTimeout(
+                    function () {
+
+                        envelopeScreen.classList.add(
+                            "hidden"
+                        );
+
+
+                        choiceScreen.classList.remove(
+                            "hidden"
+                        );
+
+
+                        window.scrollTo({
+                            top: 0,
+                            behavior: "smooth"
+                        });
+
+                    },
+                    900
+                );
+
+            }
+        );
+
+
+
+        /* =========================================
+           OPEN MESSAGE
+        ========================================== */
+
+        function openMessage() {
+
+            choiceScreen.classList.add(
+                "fade-out"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    choiceScreen.classList.add(
+                        "hidden"
+                    );
+
+
+                    choiceScreen.classList.remove(
+                        "fade-out"
+                    );
+
+
+                    messageScreen.classList.remove(
+                        "hidden"
+                    );
+
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                },
+                500
+            );
+
+        }
+
+
+
+        /* =========================================
+           CLOSE
+        ========================================== */
+
+        function showSad() {
+
+            choiceScreen.classList.add(
+                "fade-out"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    choiceScreen.classList.add(
+                        "hidden"
+                    );
+
+
+                    choiceScreen.classList.remove(
+                        "fade-out"
+                    );
+
+
+                    sadScreen.classList.remove(
+                        "hidden"
+                    );
+
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                },
+                500
+            );
+
+        }
+
+
+
+        /* =========================================
+           BACK
+        ========================================== */
+
+        function goBack() {
+
+            sadScreen.classList.add(
+                "fade-out"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    sadScreen.classList.add(
+                        "hidden"
+                    );
+
+
+                    sadScreen.classList.remove(
+                        "fade-out"
+                    );
+
+
+                    choiceScreen.classList.remove(
+                        "hidden"
+                    );
+
+
+                    window.scrollTo({
+                        top: 0,
+                        behavior: "smooth"
+                    });
+
+                },
+                500
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>
